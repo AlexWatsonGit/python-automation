@@ -3,12 +3,15 @@ from behave import given, when, then
 from time import sleep
 
 from selenium.webdriver.common.by import By
-
+search_button = By.CSS_SELECTOR, 'button[data-test="@web/Search/SearchButton"]'
+search = By.CSS_SELECTOR, 'input#search'
 benefit_cells = By.CSS_SELECTOR, "a[data-test='@web/slingshot-components/CellsComponent/Link']"
+lemon_tea = By.CSS_SELECTOR, 'a[aria-label="Bigelow Lemon Ginger Plus Probiotics Herbal Tea Bags - 18ct"]'
 @given('Open the web page {target}')
 def Open_Target(context, target):
-    context.driver.get(target)
-    sleep(10)
+#     context.driver.get(target)
+#     sleep(10)
+    context.app.main_page.open_main()
 @when('Click on cart')
 def Click_Cart(context):
     context.driver.find_element(By.CSS_SELECTOR, 'div[data-test="@web/CartIcon"]').click()
@@ -34,12 +37,6 @@ def verify_sign_in_opened(context):
 
 
 
-#this one below will verify something is there using the assert
-# @then('Verify search worked for {expected_product}')
-# def verify_search_worked(context, expected_product):
-#     x = context.driver.find_element(By.XPATH, '').text
-#     assert expected_product in x f'Expected "{expected_product}" not in {x}'
-
 @then('Verify there are 10 benefit cells')
 def verify_benefit_cells(context):
     context.driver.find_elements(*benefit_cells)
@@ -48,9 +45,10 @@ def verify_benefit_cells(context):
 
 @when('Search for {product}')
 def click_search_bar(context, product):
-    context.driver.find_element(By.CSS_SELECTOR, 'input#search').send_keys(product)
-    context.driver.find_element(By.CSS_SELECTOR, 'button[data-test="@web/Search/SearchButton"]').click()
-    sleep(6)
+    # context.driver.find_element(*search).send_keys(product)
+    # context.driver.find_element(*search_button).click()
+    # sleep(6)
+    context.app.header.search_product()
 
 
 
@@ -65,3 +63,28 @@ def verify_item_added(context):
     context.driver.find_element(By.CSS_SELECTOR, 'button[aria-label="close"]').click()
     context.driver.find_element(By.CSS_SELECTOR, 'div[data-test="@web/CartIcon"]').click()
     context.driver.find_element(By.CSS_SELECTOR, 'img[alt="PlayStation 5 Digital Edition Console (Slim)"]')
+
+@then('Verify item pops up')
+def verify_item_popup(context):
+    # context.driver.find_element(*lemon_tea)
+    context.app.search_results_page.verify_search_results()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
