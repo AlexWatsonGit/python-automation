@@ -7,11 +7,13 @@ search_button = By.CSS_SELECTOR, 'button[data-test="@web/Search/SearchButton"]'
 search = By.CSS_SELECTOR, 'input#search'
 benefit_cells = By.CSS_SELECTOR, "a[data-test='@web/slingshot-components/CellsComponent/Link']"
 lemon_tea = By.CSS_SELECTOR, 'a[aria-label="Bigelow Lemon Ginger Plus Probiotics Herbal Tea Bags - 18ct"]'
+options = By.CSS_SELECTOR, 'li[class="styles__StyledListItem-sc-hijc5f-3 kyXjnj"][data-io-v="partial"]'
+color_name = (By.CSS_SELECTOR, 'span[class*="styles__StyledHeaderSpan-sc-tezx2e-2"]')
 @given('Open the web page {target}')
 def Open_Target(context, target):
-#     context.driver.get(target)
-#     sleep(10)
-    context.app.main_page.open_main()
+    context.driver.get(target)
+    sleep(10)
+#     context.app.main_page.open_main()
 @when('Click on cart')
 def Click_Cart(context):
     context.driver.find_element(By.CSS_SELECTOR, 'div[data-test="@web/CartIcon"]').click()
@@ -68,6 +70,25 @@ def verify_item_added(context):
 def verify_item_popup(context):
     # context.driver.find_element(*lemon_tea)
     context.app.search_results_page.verify_search_results()
+
+
+@then('Verify user can loop through colors')
+def loop_through_colors(context):
+    expected_colors = []
+    actual_colors = []
+
+    colors = context.driver.find_elements(*options)
+    for color in colors:
+        color.click()
+        sleep(2)
+        selected_color = context.driver.find_elements(*color_name).text
+        print(selected_color)
+
+        # selected_color = selected_color('\n')[1]
+        # actual_colors.append(selected_color)
+        # print(actual_colors)
+
+    # assert expected_colors == actual_colors, f'{expected_colors} did not match {actual_colors}'
 
 
 
